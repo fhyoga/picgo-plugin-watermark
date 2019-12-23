@@ -42,3 +42,6 @@ yarn.lock
 
 others
 .DS_Store
+.cache
+dist
+fixture/
