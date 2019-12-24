@@ -21,8 +21,8 @@ export const getCoordinateByPosition = (prop: {
     position: PositionType;
   };
 }): { left: number } => {
-  let { width, height, waterMark } = prop;
-  let p = waterMark.position.split("-");
+  const { width, height, waterMark } = prop;
+  const p = waterMark.position.split("-");
   return p.reduce(
     (acc, pos) => {
       switch (pos) {

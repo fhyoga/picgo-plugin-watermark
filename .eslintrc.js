@@ -9,15 +9,13 @@ module.exports = {
 
   parserOptions: {
     ecmaVersion: 2019,
-    sourceType: "module",
-    ecmaFeatures: {
-      jsx: true
-    }
+    sourceType: "module"
   },
   rules: {
     "@typescript-eslint/interface-name-prefix": [
       "warn",
       { prefixWithI: "always" }
-    ]
+    ],
+    "prefer-const": "off"
   }
 };

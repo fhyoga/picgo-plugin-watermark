@@ -3,16 +3,6 @@ import sharp from "sharp";
 import path from "path";
 import { getCoordinateByPosition, PositionType } from "./util";
 import { loadFontFamily, getSvg } from "./text2svg";
-export = (ctx: Picgo) => {
-  const register = () => {
-    ctx.helper.transformer.register("watermark", { handle });
-  };
-  return {
-    register,
-    transformer: "watermark",
-    config
-  };
-};
 
 const handle = async (ctx: Picgo) => {
   const input = ctx.input;
@@ -127,4 +117,15 @@ const config = (ctx: Picgo) => {
       alias: "水印位置"
     }
   ];
+};
+
+export = (ctx: Picgo) => {
+  const register = () => {
+    ctx.helper.transformer.register("watermark", { handle });
+  };
+  return {
+    register,
+    transformer: "watermark",
+    config
+  };
 };
