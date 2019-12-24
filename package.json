@@ -8,6 +8,7 @@
     "dev": "tsc -w -p .",
     "build": "tsc -p .",
     "clean": "rimraf lib",
+    "test": "echo 'test'",
     "lint": "eslint src/*.ts --fix",
     "release": "standard-version",
     "postinstall": "electron-rebuild --version 6.1.7"
