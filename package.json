@@ -17,7 +17,8 @@
     "access": "public"
   },
   "files": [
-    "lib"
+    "lib",
+    "logo.png"
   ],
   "repository": {
     "type": "git",
