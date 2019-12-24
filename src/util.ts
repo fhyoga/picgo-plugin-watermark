@@ -1,9 +1,4 @@
-import { fontOptions, OFFSET } from "./attr";
-import path from "path";
-const TextToSVG = require("text-to-svg");
-const textToSVG = TextToSVG.loadSync(
-  path.join(__dirname, "../fonts/Arial-Unicode-MS.ttf")
-);
+import { OFFSET } from "./attr";
 
 export enum PositionType {
   lt = "left-top",
@@ -54,11 +49,4 @@ export const getCoordinateByPosition = (prop: {
     },
     { left: 0, top: 0 }
   );
-};
-
-export const getSvg = (
-  text: string,
-  options?: { fontSize?: number; [propName: string]: any }
-): string => {
-  return textToSVG.getSVG(text, { ...fontOptions, ...options });
 };
