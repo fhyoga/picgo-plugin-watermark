@@ -1,7 +1,7 @@
 {
   "name": "picgo-plugin-watermark",
   "version": "0.0.1",
-  "description": "picgo-plugin-watermark",
+  "description": "PicGo's watermark plugin",
   "main": "./lib/index.js",
   "bin": {},
   "scripts": {
@@ -10,7 +10,6 @@
     "clean": "rimraf lib",
     "lint": "eslint src test",
     "release": "standard-version",
-    "fixture": "parcel ./fixtrue/index.js",
     "postinstall": "electron-rebuild --version 6.1.7"
   },
   "publishConfig": {
@@ -18,8 +17,7 @@
   },
   "files": [
     "lib",
-    "src",
-    "fonts"
+    "src"
   ],
   "repository": {
     "type": "git",
@@ -28,7 +26,9 @@
   "keywords": [
     "npm",
     "node",
-    "javascript"
+    "watermark",
+    "picgo",
+    "picgo-gui-plugin"
   ],
   "author": "Dec-F",
   "license": "MIT",
@@ -47,8 +47,6 @@
   "dependencies": {
     "electron-rebuild": "^1.8.8",
     "sharp": "^0.23.4",
-    "simple-svg-tools": "^1.1.12",
-    "svg-text": "^0.5.1",
     "text-to-svg": "^3.1.5"
   }
 }

@@ -2,7 +2,7 @@
 
 # Features
 
-- Add watermark to picture
+Add watermark to picture
 
 # Installation
 
@@ -10,9 +10,14 @@ Open [PicGo](https://github.com/Molunerfinn/PicGo) and add this plugin `picgo-pl
 
 ### Setting
 
+#### fontFamily
+
+字体文件路径。E.g:`/Users/fonts/Arial-Unicode-MS.ttf`。
+默认只支持英文水印，中文支持需要自行导入中文字体文件。
+
 #### text
 
-水印文字
+水印文字。E.g:`hello world`
 
 #### fontSize
 
@@ -20,7 +25,7 @@ Open [PicGo](https://github.com/Molunerfinn/PicGo) and add this plugin `picgo-pl
 
 #### image
 
-水印图片，优先级大于文字
+水印图片路径。E.g:`/Users/watermark.png`，优先级大于文字
 
 #### position
 
