@@ -20,12 +20,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: yarn install
+          registry-url: "https://registry.npmjs.org"
+      - name: Install
         run: |
           yarn install
-      - name: build
+      - name: Lint
         run: |
           yarn lint
-      - name: build
+      - name: Test
+        run: |
+          yarn test
+      - name: Build
         run: |
           yarn build
+      - name: publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
