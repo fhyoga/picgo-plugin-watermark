@@ -1,25 +1,36 @@
 import Picgo from "picgo";
+import { PluginConfig } from "picgo/dist/utils/interfaces";
 import sharp from "sharp";
 import path from "path";
 import { getCoordinateByPosition, PositionType } from "./util";
 import { loadFontFamily, getSvg } from "./text2svg";
 
-const handle = async (ctx: Picgo) => {
+const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
   const input = ctx.input;
   const userConfig = ctx.getConfig("picgo-plugin-watermark");
-  let { text, position = "rb", fontSize, image, fontFamily } = userConfig;
-  fontSize = parseInt(fontSize);
+  const { text, position = "rb", fontSize, image, fontFamily } = userConfig;
+  const parsedFontSize = parseInt(fontSize);
   // 无效数字且不为空
-  if (fontSize === NaN && fontSize !== null) {
-    ctx.log.error("fontSize设置错误，检查是否为有效数字");
-    throw new Error("fontSize设置错误，检查是否为有效数字");
+  if (isNaN(parsedFontSize) && fontSize !== null) {
+    ctx.log.error("fontSize设置错误");
+    ctx.emit("notification", {
+      title: "watermark设置错误",
+      body: "fontSize设置错误，检查是否为有效数字"
+    });
+    // To prevent the next step
+    throw new Error();
   }
   try {
     loadFontFamily(fontFamily || undefined);
   } catch (error) {
-    ctx.log.error("字体文件载入失败，请检查文件路径");
+    ctx.log.error("字体文件载入失败");
     ctx.log.error(error);
-    throw error;
+    ctx.emit("notification", {
+      title: "watermark设置错误",
+      body: "字体文件载入失败，请检查字体文件路径"
+    });
+    // To prevent the next step
+    throw new Error();
   }
 
   let waterMark = null;
@@ -31,7 +42,11 @@ const handle = async (ctx: Picgo) => {
       throw error;
     }
   } else {
-    waterMark = sharp(Buffer.from(getSvg(text, fontSize ? { fontSize } : {})));
+    waterMark = sharp(
+      Buffer.from(
+        getSvg(text, parsedFontSize ? { fontSize: parsedFontSize } : {})
+      )
+    );
   }
   const waterMarkMeta = await waterMark.metadata();
 
@@ -70,7 +85,7 @@ const handle = async (ctx: Picgo) => {
   ctx.output = output;
   return ctx;
 };
-const config = (ctx: Picgo) => {
+const config: (ctx: Picgo) => PluginConfig[] = ctx => {
   let userConfig = ctx.getConfig("picgo-plugin-watermark");
   if (!userConfig) {
     userConfig = {};
@@ -119,8 +134,8 @@ const config = (ctx: Picgo) => {
   ];
 };
 
-export = (ctx: Picgo) => {
-  const register = () => {
+export = (ctx: Picgo): any => {
+  const register: () => void = () => {
     ctx.helper.transformer.register("watermark", { handle });
   };
   return {
