@@ -13,6 +13,7 @@ Open [PicGo](https://github.com/Molunerfinn/PicGo) and add this plugin `picgo-pl
 #### fontFamily
 
 字体文件路径。E.g:`/Users/fonts/Arial-Unicode-MS.ttf`。
+
 默认只支持英文水印，中文支持需要自行导入中文字体文件。
 
 #### text
@@ -44,3 +45,7 @@ export enum PositionType {
   rb = "right-bottom"
 }
 ```
+
+# ChangeLog
+
+[ChangeLog](https://github.com/Dec-F/picgo-plugin-watermark/blob/master/CHANGELOG.md)
