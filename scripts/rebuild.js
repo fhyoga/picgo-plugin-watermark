@@ -19,11 +19,11 @@ if (/\//.test(argv)) {
     console.log("stdout: ", stdout);
   });
 } else {
+  // ! Fuck escape space!!!!!!!!!!!!
+  let mpath = path.join(__dirname, "../../../").replace(/(\s)/g, "\\$1");
+  console.log("path:", mpath);
   exec(
-    `cd ../ && ls && npx electron-rebuild --version ${ELECTRON_VERSION} --module-dir ${path.join(
-      process.cwd(),
-      "../../"
-    )}`,
+    `npx electron-rebuild --version ${ELECTRON_VERSION} --module-dir ${mpath}`,
     (err, stdout) => {
       console.log("err", err);
       console.log("stdout: ", stdout);
