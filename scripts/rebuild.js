@@ -13,7 +13,14 @@ console.log("npm_config_argv: ", npm_config_argv);
 console.log("argv: ", argv);
 console.log("isDev: ", /\//.test(argv));
 if (/\//.test(argv)) {
-  exec(`npx electron-rebuild --version ${ELECTRON_VERSION}`);
+  exec(`npx electron-rebuild --version ${ELECTRON_VERSION}`, (err, stdout) => {
+    console.log("err", err);
+    console.log("stdout: ", stdout);
+  });
 } else {
-  exec(`cd .. && npx electron-rebuild --version ${ELECTRON_VERSION}`);
+  `cd ../../ && ls && npx electron-rebuild --version ${ELECTRON_VERSION}`,
+    (err, stdout) => {
+      console.log("err", err);
+      console.log("stdout: ", stdout);
+    };
 }
