@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.4...v0.0.5) (2019-12-25)
+
+
+### Bug Fixes
+
+* **pkg.json:** add scripts dir ([f912403](https://github.com/Dec-F/picgo-plugin-watermark/commit/f912403cd177aaa1d73aeef8fe05c4ab6817006a))
+
 ### [0.0.4](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.3...v0.0.4) (2019-12-25)
 
 
