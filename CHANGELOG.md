@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.2...v0.0.3) (2019-12-25)
+
+
+### Features
+
+* add the minimum image size limit ([5d4eaf7](https://github.com/Dec-F/picgo-plugin-watermark/commit/5d4eaf7f4f2491e8b23b11deaf0917ee9980ca28))
+
+
+### Bug Fixes
+
+* wrong judgment ([03d9130](https://github.com/Dec-F/picgo-plugin-watermark/commit/03d913034e6c15f48e385486df8dd769ddecbd33))
+
 ### [0.0.2](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.1...v0.0.2) (2019-12-24)
 
 
