@@ -1,5 +1,6 @@
 const ELECTRON_VERSION = "6.1.7";
 
+const path = require("path");
 const { exec } = require("child_process");
 const { npm_config_argv } = process.env;
 const argv = JSON.parse(npm_config_argv).original[1] || "";
@@ -18,9 +19,14 @@ if (/\//.test(argv)) {
     console.log("stdout: ", stdout);
   });
 } else {
-  `cd ../../ && ls && npx electron-rebuild --version ${ELECTRON_VERSION}`,
+  exec(
+    `cd ../ && ls && npx electron-rebuild --version ${ELECTRON_VERSION} --module-dir ${path.join(
+      process.cwd(),
+      "../../"
+    )}`,
     (err, stdout) => {
       console.log("err", err);
       console.log("stdout: ", stdout);
-    };
+    }
+  );
 }
