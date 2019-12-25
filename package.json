@@ -18,7 +18,8 @@
   },
   "files": [
     "lib",
-    "logo.png"
+    "logo.png",
+    "scripts"
   ],
   "repository": {
     "type": "git",
