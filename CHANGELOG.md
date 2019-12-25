@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.5...v0.0.6) (2019-12-25)
+
+
+### Bug Fixes
+
+* fix rebuild cwd ([4bad2cf](https://github.com/Dec-F/picgo-plugin-watermark/commit/4bad2cf5d4119fcd9e8ca0aea30b5cdbbc2bca7c))
+
 ### [0.0.5](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.4...v0.0.5) (2019-12-25)
 
 
