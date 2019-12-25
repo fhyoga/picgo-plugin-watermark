@@ -1,12 +1,18 @@
 # picgo-plugin-watermark
 
+# Screenshot
+
+![](https://gitee.com/Dec-F/ImageHosting/raw/master/img/20191225142805.png)
+
+![](https://gitee.com/Dec-F/ImageHosting/raw/master/img/2000-57139f0ecc19a932873e59a055d486d8.jpg)
+
 # Features
 
 Add watermark to picture
 
 # Installation
 
-Open [PicGo](https://github.com/Molunerfinn/PicGo) and add this plugin `picgo-plugin-watermark`
+Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `picgo-plugin-watermark`
 
 ### Setting
 
