@@ -1,25 +1,37 @@
 import Picgo from "picgo";
-import { PluginConfig } from "picgo/dist/utils/interfaces";
-import sharp from "sharp";
-import path from "path";
-import { getCoordinateByPosition, PositionType } from "./util";
+
+import { parseAndValidate } from "./util";
 import { loadFontFamily, getSvg } from "./text2svg";
+import { config } from "./config";
+import { outputGen } from "./output";
 
 const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
   const input = ctx.input;
   const userConfig = ctx.getConfig("picgo-plugin-watermark");
-  const { text, position = "rb", fontSize, image, fontFamily } = userConfig;
-  const parsedFontSize = parseInt(fontSize);
-  // 无效数字且不为空
-  if (isNaN(parsedFontSize) && fontSize !== null) {
-    ctx.log.error("fontSize设置错误");
+
+  const [
+    errors,
+    {
+      text,
+      position = "rb",
+      parsedFontSize,
+      image,
+      fontFamily,
+      minWidth,
+      minHeight
+    }
+  ] = parseAndValidate(userConfig);
+
+  // Verify configuration
+  if (errors.length) {
     ctx.emit("notification", {
       title: "watermark设置错误",
-      body: "fontSize设置错误，检查是否为有效数字"
+      body: errors.join("，") + "设置错误，请检查"
     });
     // To prevent the next step
     throw new Error();
   }
+
   try {
     loadFontFamily(fontFamily || undefined);
   } catch (error) {
@@ -35,103 +47,33 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
 
   let waterMark = null;
   if (image) {
-    try {
-      waterMark = sharp(image);
-    } catch (error) {
-      ctx.log.error(error);
-      throw error;
-    }
+    waterMark = image;
   } else {
-    waterMark = sharp(
-      Buffer.from(
-        getSvg(text, parsedFontSize ? { fontSize: parsedFontSize } : {})
-      )
+    waterMark = Buffer.from(
+      getSvg(text, parsedFontSize ? { fontSize: parsedFontSize } : {})
     );
   }
-  const waterMarkMeta = await waterMark.metadata();
-
-  const output = await Promise.all(
-    input.map(async image => {
-      const fileName = path.basename(image);
-      const extname = path.extname(image);
-      const sharpedImage = sharp(image);
-      const { width, height } = await sharpedImage.metadata();
-      const coordinate = getCoordinateByPosition({
-        width,
-        height,
-        waterMark: {
-          width: waterMarkMeta.width,
-          height: waterMarkMeta.height,
-          position: PositionType[position]
-        }
-      });
-      ctx.log.info(JSON.stringify(coordinate));
-      return {
-        buffer: await sharpedImage
-          .composite([
-            {
-              input: await waterMark.toBuffer(),
-              ...coordinate
-            }
-          ])
-          .toBuffer(),
-        width,
-        height,
-        fileName,
-        extname
-      };
-    })
-  );
-  ctx.output = output;
-  return ctx;
-};
-const config: (ctx: Picgo) => PluginConfig[] = ctx => {
-  let userConfig = ctx.getConfig("picgo-plugin-watermark");
-  if (!userConfig) {
-    userConfig = {};
+  try {
+    ctx.output = await outputGen(
+      {
+        input,
+        minHeight,
+        minWidth,
+        position,
+        waterMark
+      },
+      ctx.log
+    );
+  } catch (error) {
+    ctx.log.error(error);
+    ctx.emit("notification", {
+      title: "watermark转化错误",
+      body: "可能是水印图或字体文件路径无效，请检查。"
+    });
+    // To prevent the next step
+    throw new Error();
   }
-  return [
-    {
-      name: "fontFamily",
-      type: "input",
-      default: userConfig.fontFamily,
-      required: false,
-      message: "字体文件路径；水印中有汉字时，此项必须有",
-      alias: "字体文件路径"
-    },
-    {
-      name: "text",
-      type: "input",
-      default: userConfig.text,
-      required: false,
-      message: "文字，默认只支持英文，中文支持需要配置字体文件路径",
-      alias: "水印文字"
-    },
-    {
-      name: "fontSize",
-      type: "input",
-      default: userConfig.fontSize,
-      required: false,
-      message: "默认 14px",
-      alias: "字体大小"
-    },
-    {
-      name: "image",
-      type: "input",
-      default: userConfig.image,
-      required: false,
-      message: "水印图片的绝对路径，优先级高于文字",
-      alias: "水印图片路径"
-    },
-    {
-      name: "position",
-      type: "input",
-      default: userConfig.position,
-      required: false,
-      message: "E.g:右上为'rt'，更多信息查看Readme",
-      alias: "水印位置"
-    }
-  ];
+  return ctx;
 };
 
 export = (ctx: Picgo): any => {

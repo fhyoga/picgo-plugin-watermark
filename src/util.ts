@@ -12,6 +12,10 @@ export enum PositionType {
   rb = "right-bottom"
 }
 
+interface Coordinate {
+  left: number;
+  top: number;
+}
 export const getCoordinateByPosition = (prop: {
   width: number;
   height: number;
@@ -20,7 +24,7 @@ export const getCoordinateByPosition = (prop: {
     height: number;
     position: PositionType;
   };
-}): { left: number } => {
+}): Coordinate => {
   const { width, height, waterMark } = prop;
   const p = waterMark.position.split("-");
   return p.reduce(
@@ -49,4 +53,49 @@ export const getCoordinateByPosition = (prop: {
     },
     { left: 0, top: 0 }
   );
+};
+
+export interface Config {
+  text: string;
+  position: string;
+  fontSize: string;
+  image: string;
+  fontFamily: string;
+  minSize: string;
+  minWidth?: number;
+  minHeight?: number;
+  parsedFontSize?: number;
+}
+export const parseAndValidate: (
+  config: Config
+) => [string[], Config] = config => {
+  const { position, fontSize, minSize } = config;
+  const parsedFontSize = parseInt(fontSize);
+  let parsedConfig: Config = { ...config };
+  let errors = [];
+  // 无效数字且不为空
+  if (isNaN(parsedFontSize) && fontSize !== null) {
+    errors.push("fontSize");
+  } else {
+    parsedConfig.parsedFontSize = parsedFontSize;
+  }
+  if (position && !PositionType[position]) {
+    errors.push("position");
+  }
+  if (minSize) {
+    let [minWidth, minHeight] = minSize.split("*").map((v: string) => +v);
+    if (!minWidth || !minHeight) {
+      errors.push("minSize");
+    } else {
+      parsedConfig.minHeight = minHeight;
+      parsedConfig.minWidth = minWidth;
+    }
+  }
+  return [
+    errors,
+    {
+      ...config,
+      ...parsedConfig
+    }
+  ];
 };

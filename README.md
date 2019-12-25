@@ -46,6 +46,12 @@ export enum PositionType {
 }
 ```
 
+#### minSize
+
+最小尺寸限制，小于这一尺寸不添加水印。E.g.200\*200。
+
+高度或宽度任何一个小于限制，都会触发
+
 # ChangeLog
 
 [ChangeLog](https://github.com/Dec-F/picgo-plugin-watermark/blob/master/CHANGELOG.md)
