@@ -1,5 +1,5 @@
 import Picgo from "picgo";
-import { PluginConfig } from "picgo/dist/utils/interfaces";
+import { PluginConfig } from "picgo/dist/src/utils/interfaces";
 
 export const config: (ctx: Picgo) => PluginConfig[] = ctx => {
   let userConfig = ctx.getConfig("picgo-plugin-watermark");
