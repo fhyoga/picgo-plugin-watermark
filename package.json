@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-watermark",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "PicGo's watermark plugin",
   "main": "./lib/index.js",
   "bin": {},
@@ -25,6 +25,7 @@
     "type": "git",
     "url": "https://github.com/Dec-F/picgo-plugin-watermark"
   },
+  "homepage": "https://github.com/Dec-F/picgo-plugin-watermark",
   "keywords": [
     "npm",
     "node",

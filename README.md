@@ -2,9 +2,11 @@
 
 # Screenshot
 
-![](https://gitee.com/Dec-F/ImageHosting/raw/master/img/20191225142805.png)
+![](https://gitee.com/Dec-F/ImageHosting/raw/master/img/2019/12/25/20191225174743.png)
 
 ![](https://gitee.com/Dec-F/ImageHosting/raw/master/img/2000-57139f0ecc19a932873e59a055d486d8.jpg)
+
+![](https://gitee.com/Dec-F/ImageHosting/raw/master/img/2019/12/27/20191227170849.jpg)
 
 # Features
 
@@ -12,19 +14,27 @@ Add watermark to picture
 
 # Installation
 
-Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `picgo-plugin-watermark`
+~~Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `picgo-plugin-watermark`~~
 
+由于依赖于原生模块，需要手动安装本插件。
+```bash
+cd {your-plugins-root-path} //插件目录，可以在PicGo设置中点击打开配置文件，配置文件所在文件夹就是插件目录
+
+npm install picgo-plugin-watermark
+
+//重启PicGo后，插件就可以使用了
+```
 ### Setting
 
 #### fontFamily
 
-字体文件路径。E.g:`/Users/fonts/Arial-Unicode-MS.ttf`。
+字体文件路径。E.g.`/Users/fonts/Arial-Unicode-MS.ttf`。
 
 默认只支持英文水印，中文支持需要自行导入中文字体文件。
 
 #### text
 
-水印文字。E.g:`hello world`
+水印文字。E.g.`hello world`
 
 #### fontSize
 
@@ -32,7 +42,7 @@ Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `p
 
 #### image
 
-水印图片路径。E.g:`/Users/watermark.png`，优先级大于文字
+水印图片路径。E.g.`/Users/watermark.png`，优先级大于文字
 
 #### position
 
@@ -54,7 +64,7 @@ export enum PositionType {
 
 #### minSize
 
-最小尺寸限制，小于这一尺寸不添加水印。E.g.200\*200。
+原图最小尺寸，小于这一尺寸不添加水印。E.g.200\*200。
 
 高度或宽度任何一个小于限制，都会触发
 
