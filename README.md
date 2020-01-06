@@ -16,14 +16,19 @@ Add watermark to picture
 
 ~~Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `picgo-plugin-watermark`~~
 
-由于依赖于原生模块，需要手动安装本插件。
-```bash
-cd {your-plugins-root-path} //插件目录，可以在PicGo设置中点击打开配置文件，配置文件所在文件夹就是插件目录
+由于依赖于原生模块，需要手动安装本插件且要一些魔法。
+1. 首先确认PicGo版本>=v2.2.0
 
-npm install picgo-plugin-watermark
+2. `cd {your-plugins-root-path}`
+插件目录，可以在PicGo设置中点击打开配置文件，配置文件所在文件夹就是插件目录
 
-//重启PicGo后，插件就可以使用了
-```
+3. `npm install picgo-plugin-watermark`
+
+4. `npm install picgo-plugin-watermark`
+是的，这个命令要运行两遍，原因在[issues](https://github.com/Dec-F/picgo-plugin-watermark/issues/5)
+
+5. 重启PicGo后，插件就可以使用了
+
 ### Setting
 
 #### fontFamily
