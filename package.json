@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-watermark",
-  "version": "0.0.11",
+  "version": "0.1.0-beta",
   "description": "PicGo's watermark plugin",
   "main": "./lib/index.js",
   "bin": {},
@@ -19,7 +19,8 @@
   "files": [
     "lib",
     "logo.png",
-    "scripts"
+    "scripts",
+    "external"
   ],
   "repository": {
     "type": "git",
