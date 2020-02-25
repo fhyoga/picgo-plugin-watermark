@@ -23,7 +23,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - name: Install
         run: |
-          yarn install
+          SKIP_REBUILD=1 yarn install
       - name: Lint
         run: |
           yarn lint

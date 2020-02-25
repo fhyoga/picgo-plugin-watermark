@@ -1,6 +1,12 @@
 const platform = require("os").platform;
 const fs = require("fs");
 const path = require("path");
+
+// is CI?
+console.log(process.env.SKIP_REBUILD);
+if (process.env.SKIP_REBUILD) return
+
+
 const sourcePath = path.join(
   __dirname,
   `../external/sharp/${platform}/sharp.node`
