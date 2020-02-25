@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.11...v0.1.0) (2020-02-25)
+
+
+### Features
+
+* build in sharp ([30d6528](https://github.com/Dec-F/picgo-plugin-watermark/commit/30d6528cc87cd2047e0167dfdad0f9cfaef37f80))
+
 ### [0.0.11](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.10...v0.0.11) (2019-12-27)
 
 ### [0.0.10](https://github.com/Dec-F/picgo-plugin-watermark/compare/v0.0.8...v0.0.10) (2019-12-27)
