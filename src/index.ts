@@ -78,11 +78,10 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
 
 export = (ctx: Picgo): any => {
   const register: () => void = () => {
-    ctx.helper.transformer.register("watermark", { handle });
+    ctx.helper.beforeUploadPlugins.register("watermark", { handle });
   };
   return {
     register,
-    transformer: "watermark",
     config
   };
 };
