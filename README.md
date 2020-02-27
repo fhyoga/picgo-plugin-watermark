@@ -12,8 +12,6 @@
 
 Add watermark to picture
 
-对Linux的支持还在开发，以及后续会对插件的定位做调整，不再是个transformer，而是注册为beforeUploadPlugins。
-
 # Installation
 
 Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `picgo-plugin-watermark`
