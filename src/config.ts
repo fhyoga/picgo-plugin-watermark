@@ -1,10 +1,20 @@
 import Picgo from "picgo";
-import { PluginConfig } from "picgo/dist/src/utils/interfaces";
+import { IPluginConfig } from "picgo/dist/src/utils/interfaces";
 
-export const config: (ctx: Picgo) => PluginConfig[] = ctx => {
-  let userConfig = ctx.getConfig("picgo-plugin-watermark");
+import {IConfig} from './util'
+
+export const config: (ctx: Picgo) => IPluginConfig[] = ctx => {
+  let userConfig = ctx.getConfig<IConfig>("picgo-plugin-watermark");
   if (!userConfig) {
-    userConfig = {};
+    userConfig = {
+      image: '',
+      fontFamily: '',
+      fontSize: '',
+      textColor: '',
+      minSize: '',
+      position: '',
+      text: '',
+    };
   }
   return [
     {
@@ -22,6 +32,14 @@ export const config: (ctx: Picgo) => PluginConfig[] = ctx => {
       required: false,
       message: "文字，默认只支持英文，中文支持需要配置字体文件路径",
       alias: "水印文字"
+    },
+    {
+      name: "textColor",
+      type: "input",
+      default: userConfig.textColor,
+      required: false,
+      message: "文字的颜色，支持rgb和hex格式，如rgb(178, 178, 178)或#b2b2b2",
+      alias: "水印文字颜色"
     },
     {
       name: "fontSize",

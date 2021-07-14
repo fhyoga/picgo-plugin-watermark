@@ -9,5 +9,18 @@ export const getSvg = (
   text: string,
   options?: { fontSize?: number; [propName: string]: any }
 ): string => {
-  return textToSVG.getSVG(text, { ...fontOptions, ...options });
+  const svgOptions: {[propName: string]: any} = {
+    attributes: {},
+    ...fontOptions
+  }
+  if (options) {
+    svgOptions.attributes = {
+      ...svgOptions.attributes,
+      ...options
+    }
+    if (options.fontSize) {
+      svgOptions.fontSize = options.fontSize
+    }
+  }
+  return textToSVG.getSVG(text, svgOptions);
 };
