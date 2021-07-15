@@ -1,13 +1,13 @@
 import Picgo from "picgo";
 
-import { parseAndValidate } from "./util";
+import { parseAndValidate, IConfig } from "./util";
 import { loadFontFamily, getSvg } from "./text2svg";
 import { config } from "./config";
-import { outputGen } from "./output";
+import { inputAddWaterMarkHandle } from "./input";
 
 const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
   const input = ctx.input;
-  const userConfig = ctx.getConfig("picgo-plugin-watermark");
+  const userConfig = ctx.getConfig<IConfig>("picgo-plugin-watermark");
 
   const [
     errors,
@@ -18,7 +18,8 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
       image,
       fontFamily,
       minWidth,
-      minHeight
+      minHeight,
+      textColor,
     }
   ] = parseAndValidate(userConfig);
 
@@ -49,12 +50,16 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
   if (image) {
     waterMark = image;
   } else {
+    const svgOptions: {[key: string]: any} = {}
+    parsedFontSize && (svgOptions.fontSize = parsedFontSize)
+    textColor && (svgOptions.fill = textColor)
     waterMark = Buffer.from(
-      getSvg(text, parsedFontSize ? { fontSize: parsedFontSize } : {})
+      getSvg(text, svgOptions)
     );
   }
   try {
-    ctx.output = await outputGen(
+    ctx.input = await inputAddWaterMarkHandle(
+      ctx,
       {
         input,
         minHeight,
@@ -78,7 +83,7 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
 
 export = (ctx: Picgo): any => {
   const register: () => void = () => {
-    ctx.helper.beforeUploadPlugins.register("watermark", { handle });
+    ctx.helper.beforeTransformPlugins.register("watermark", { handle });
   };
   return {
     register,

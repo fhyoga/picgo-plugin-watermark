@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-watermark",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "PicGo's watermark plugin",
   "main": "./lib/index.js",
   "bin": {},
@@ -35,8 +35,12 @@
     "picgo-gui-plugin"
   ],
   "author": "Dec-F",
+  "contributors": [
+    "panyanbin <me@panyanbin.com> (https://www.panyanbin.com)"
+  ],
   "license": "MIT",
   "devDependencies": {
+    "@types/fs-extra": "^9.0.12",
     "@types/node": "^12.12.21",
     "@types/sharp": "^0.23.1",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
@@ -49,6 +53,9 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
+    "color": "^3.1.3",
+    "dayjs": "^1.10.6",
+    "fs-extra": "^10.0.0",
     "sharp": "^0.23.4",
     "text-to-svg": "^3.1.5"
   }
