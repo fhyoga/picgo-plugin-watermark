@@ -19,8 +19,7 @@
   "files": [
     "lib",
     "logo.png",
-    "scripts",
-    "external"
+    "scripts"
   ],
   "repository": {
     "type": "git",
@@ -56,7 +55,10 @@
     "color": "^3.1.3",
     "dayjs": "^1.10.6",
     "fs-extra": "^10.0.0",
-    "sharp": "^0.23.4",
+    "sharp": "^0.28.3",
     "text-to-svg": "^3.1.5"
+  },
+  "engines": {
+    "node": ">10.0.0"
   }
 }
