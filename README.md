@@ -28,6 +28,10 @@ Open [PicGo](https://github.com/Molunerfinn/PicGo)>=2.2.0 and add this plugin `p
 
 水印文字。E.g.`hello world`
 
+#### textColor
+
+水印文字的颜色，支持rgb和hex格式。E.g.`rgb(178,178,178)`、`#b2b2b2`
+
 #### fontSize
 
 字体大小，默认`14`
