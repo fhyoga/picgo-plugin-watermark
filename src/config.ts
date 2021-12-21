@@ -3,6 +3,18 @@ import { IPluginConfig } from "picgo/dist/src/utils/interfaces";
 
 import {IConfig} from './util'
 
+export enum WmImageFilePathType {
+  picGoBase = '默认目录',
+  originImageBase = '原文件所在目录'
+}
+
+export enum WmImageSaveType {
+  abandon = '删除水印图片',
+  replaceOrigin = '替换原文件',
+  originNameWithTimestamp = '使用原文件名称+时间戳',
+  renameOrigin = '使用原文件名称，原文件重命名'
+}
+
 export const config: (ctx: Picgo) => IPluginConfig[] = ctx => {
   let userConfig = ctx.getConfig<IConfig>("picgo-plugin-watermark");
   if (!userConfig) {
@@ -14,8 +26,11 @@ export const config: (ctx: Picgo) => IPluginConfig[] = ctx => {
       minSize: '',
       position: '',
       text: '',
+      wmImageFilePathType: WmImageFilePathType.picGoBase,
+      wmImageSaveType: WmImageSaveType.abandon,
     };
   }
+
   return [
     {
       name: "fontFamily",
@@ -72,6 +87,24 @@ export const config: (ctx: Picgo) => IPluginConfig[] = ctx => {
       required: false,
       message: "最小尺寸限制，小于这一尺寸不添加水印。E.g.200*200",
       alias: "最小尺寸"
+    },
+    {
+      name: "wmImageFilePathType",
+      type: "list",
+      choices: Object.values(WmImageFilePathType),
+      default: userConfig.wmImageFilePathType || WmImageFilePathType.picGoBase,
+      required: false,
+      message: "请选择水印图片临时文件存储位置",
+      alias: "水印图片临时文件存储位置"
+    },
+    {
+      name: "wmImageSaveType",
+      type: "list",
+      choices: Object.values(WmImageSaveType),
+      default: userConfig.wmImageSaveType || WmImageSaveType.abandon,
+      required: false,
+      message: "请选择水印图片存储方式",
+      alias: "水印图片存储方式"
     }
   ];
 };
