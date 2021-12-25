@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import sharp from "sharp";
 import path from "path";
 import Logger from "picgo/dist/src/lib/Logger";
-import { getCoordinateByPosition, PositionType, getImageBufferData } from "./util";
+import {getCoordinateByPosition, getImageBufferData, PositionType} from "./util";
 import {WmImageFilePathType, WmImageSaveType} from "./config";
 
 interface IInput {
@@ -23,7 +23,7 @@ export const inputAddWaterMarkHandle: (
   iinput: IInput,
   logger: Logger
 ) => Promise<string[]> = async (ctx, imageInput, logger) => {
-  const { input, minWidth, minHeight, waterMark, position, wmImageFilePathType, wmImageSaveType } = imageInput;
+  const {input, minWidth, minHeight, waterMark, position, wmImageFilePathType, wmImageSaveType} = imageInput;
   const sharpedWaterMark = sharp(waterMark);
   const waterMarkMeta = await sharpedWaterMark.metadata();
 
@@ -36,7 +36,7 @@ export const inputAddWaterMarkHandle: (
 
       const sharpedImage = sharp(imageBuffer);
 
-      const { width, height, format } = await sharpedImage.metadata();
+      const {width, height, format} = await sharpedImage.metadata();
       const coordinate = getCoordinateByPosition({
         width,
         height,
@@ -99,26 +99,28 @@ export const inputAddWaterMarkHandle: (
                   path.dirname(image),
                   `${baseName}_o_${dayjs().format('YYYYMMDDHHmmss')}.${extname}`
                 )
-                fs.copyFile(image, originImageTargetPath, function (err) {
-                  if(err) {
+
+                fs.rename(image, originImageTargetPath, function (err) {
+                  if (err) {
                     logger.info(JSON.stringify(coordinate));
                     ctx.emit("notification", {
-                      title: "原文件复制失败",
-                      body: "原文件从" + image + "复制到" + originImageTargetPath + "失败"
+                      title: "图片重命名失败",
+                      body: "原文件从" + image + "重命名为" + originImageTargetPath + "失败"
                     })
                     return
                   }
-                  fs.copyFile(addWaterMarkImagePath, image, function (err) {
-                    if(err) {
+                  fs.rename(addWaterMarkImagePath, image, function (err2) {
+                    if (err2) {
                       logger.info(JSON.stringify(coordinate));
                       ctx.emit("notification", {
-                        title: "水印文件失败",
-                        body: "水印文件从" + addWaterMarkImagePath + "复制到" + image + "失败"
+                        title: "图片重命名失败",
+                        body: "水印文件从" + addWaterMarkImagePath + "重命名为" + image + "失败"
                       })
                       return
                     }
-                  })
-                })
+                  });
+                });
+
               })
               break
             case WmImageSaveType.originNameWithTimestamp:
@@ -130,13 +132,17 @@ export const inputAddWaterMarkHandle: (
             default:
               ctx.once('finished', () => {
                 // 删除 picgo 生成的图片文件，例如 `~/.picgo/20200621205720.png`
-                fs.remove(addWaterMarkImagePath).catch((e) => { ctx.log.error(e) })
+                fs.remove(addWaterMarkImagePath).catch((e) => {
+                  ctx.log.error(e)
+                })
               })
               break
           }
           ctx.once('failed', () => {
             // 删除 picgo 生成的图片文件，例如 `~/.picgo/20200621205720.png`
-            fs.remove(addWaterMarkImagePath).catch((e) => { ctx.log.error(e) })
+            fs.remove(addWaterMarkImagePath).catch((e) => {
+              ctx.log.error(e)
+            })
           })
         }
 
