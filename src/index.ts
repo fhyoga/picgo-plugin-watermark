@@ -20,8 +20,10 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
       minWidth,
       minHeight,
       textColor,
+      wmImageFilePathType,
+      wmImageSaveType,
     }
-  ] = parseAndValidate(userConfig);
+  ] = parseAndValidate(userConfig, ctx.log);
 
   // Verify configuration
   if (errors.length) {
@@ -65,7 +67,9 @@ const handle = async (ctx: Picgo): Promise<Picgo | boolean> => {
         minHeight,
         minWidth,
         position,
-        waterMark
+        waterMark,
+        wmImageFilePathType,
+        wmImageSaveType,
       },
       ctx.log
     );

@@ -2,7 +2,9 @@ import fs from 'fs-extra'
 import Picgo from "picgo";
 import Color from 'color';
 
-import { OFFSET } from "./attr";
+import {OFFSET} from "./attr";
+import {WmImageFilePathType, WmImageSaveType} from "./config";
+import Logger from "picgo/dist/src/lib/Logger";
 
 export enum PositionType {
   lt = "left-top",
@@ -20,6 +22,7 @@ interface ICoordinate {
   left: number;
   top: number;
 }
+
 export const getCoordinateByPosition = (prop: {
   width: number;
   height: number;
@@ -29,7 +32,7 @@ export const getCoordinateByPosition = (prop: {
     position: PositionType;
   };
 }): ICoordinate => {
-  const { width, height, waterMark } = prop;
+  const {width, height, waterMark} = prop;
   const p = waterMark.position.split("-");
   return p.reduce(
     (acc, pos) => {
@@ -55,7 +58,7 @@ export const getCoordinateByPosition = (prop: {
       }
       return acc;
     },
-    { left: 0, top: 0 }
+    {left: 0, top: 0}
   );
 };
 
@@ -70,13 +73,17 @@ export interface IConfig {
   minWidth?: number;
   minHeight?: number;
   parsedFontSize?: number;
+  wmImageFilePathType?: WmImageFilePathType;
+  wmImageSaveType?: WmImageSaveType;
 }
+
 export const parseAndValidate: (
-  config: IConfig
-) => [string[], IConfig] = config => {
-  const { position, fontSize, minSize, textColor } = config;
+  config: IConfig,
+  logger: Logger
+) => [string[], IConfig] = (config, logger) => {
+  const {position, fontSize, minSize, textColor, wmImageFilePathType, wmImageSaveType} = config;
   const parsedFontSize = parseInt(fontSize);
-  let parsedConfig: IConfig = { ...config };
+  let parsedConfig: IConfig = {...config};
   let errors = [];
   // 无效数字且不为空
   if (isNaN(parsedFontSize) && fontSize !== null) {
@@ -103,6 +110,39 @@ export const parseAndValidate: (
       errors.push('textColor')
     }
   }
+  if (wmImageFilePathType) {
+    try {
+      let wmImageFilePathTypes = Object.entries(WmImageFilePathType)
+        .filter(([, value]) => value == wmImageFilePathType)
+        .map(([key]) => WmImageFilePathType[key]) as WmImageFilePathType[];
+      logger.info(`解析用户配置 wmImageFilePathType 为：${wmImageFilePathTypes}`)
+      if (wmImageFilePathTypes.length > 0) {
+        parsedConfig.wmImageFilePathType = wmImageFilePathTypes[0]
+      } else {
+        parsedConfig.wmImageFilePathType = WmImageFilePathType.picGoBase
+      }
+    } catch (error) {
+      errors.push('wmImageFilePathType')
+    }
+  }
+  if (wmImageSaveType) {
+    try {
+      let wmImageSaveTypes = Object.entries(WmImageSaveType)
+        .filter(([, value]) => value == wmImageSaveType)
+        .map(([key]) => WmImageSaveType[key]) as WmImageSaveType[];
+      logger.info(`解析用户配置 wmImageSaveType 为：${wmImageSaveTypes}`)
+      if (wmImageSaveTypes.length > 0) {
+        parsedConfig.wmImageSaveType = wmImageSaveTypes[0]
+      } else {
+        parsedConfig.wmImageSaveType = WmImageSaveType.abandon
+      }
+    } catch (error) {
+      errors.push('wmImageSaveType')
+    }
+  }
+
+  logger.info(`用户填写配置信息：${JSON.stringify(config)}`)
+  logger.info(`解析配置信息：${JSON.stringify(parsedConfig)}`)
   return [
     errors,
     {
@@ -118,8 +158,8 @@ export const isUrl: (url: string) => boolean = (url) => {
 }
 
 export const downloadImage: (ctx: Picgo, url: string) => Promise<Buffer> = async (ctx, url) => {
-  return await ctx.request({ method: 'GET', url, encoding: null })
-    .on('error', function(err) {
+  return await ctx.request({method: 'GET', url, encoding: null})
+    .on('error', function (err) {
       ctx.log.error(`网络图片下载失败，${url}`)
       ctx.log.error(err)
     }).on('response', (response: Response): void => {
@@ -127,7 +167,7 @@ export const downloadImage: (ctx: Picgo, url: string) => Promise<Buffer> = async
       if (contentType && !contentType.includes('image')) {
         throw new Error(`${url} is not image`)
       }
-  })
+    })
 }
 
 export const getImageBufferData: (ctx: Picgo, imageUrl: string) => Promise<Buffer> = (ctx, imageUrl) => {
