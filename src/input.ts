@@ -83,61 +83,51 @@ export const inputAddWaterMarkHandle: (
               break
           }
 
-          addWaterMarkImagePath = path.join(
+          const addWaterMarkImageTmpPath = path.join(
             basePath,
             `${baseName}_${dayjs().format('YYYYMMDDHHmmss')}.${extname}`
           )
-          logger.info(`图片路径: ${addWaterMarkImagePath}`)
 
-          switch (wmImageSaveType) {
-            case WmImageSaveType.replaceOrigin:
-              addWaterMarkImagePath = image
-              break
-            case WmImageSaveType.renameOrigin:
-              ctx.once('finished', () => {
-                let originImageTargetPath = path.join(
-                  path.dirname(image),
-                  `${baseName}_o_${dayjs().format('YYYYMMDDHHmmss')}.${extname}`
-                )
+          await sharpedImage
+            .composite([
+              {
+                input: await sharpedWaterMark.toBuffer(),
+                ...coordinate
+              }
+            ]).toFile(addWaterMarkImageTmpPath)
 
-                fs.rename(image, originImageTargetPath, function (err) {
-                  if (err) {
-                    logger.info(JSON.stringify(coordinate));
-                    ctx.emit("notification", {
-                      title: "图片重命名失败",
-                      body: "原文件从" + image + "重命名为" + originImageTargetPath + "失败"
-                    })
-                    return
-                  }
-                  fs.rename(addWaterMarkImagePath, image, function (err2) {
-                    if (err2) {
-                      logger.info(JSON.stringify(coordinate));
-                      ctx.emit("notification", {
-                        title: "图片重命名失败",
-                        body: "水印文件从" + addWaterMarkImagePath + "重命名为" + image + "失败"
-                      })
-                      return
-                    }
-                  });
-                });
+          const originImageBakPath = path.join(
+            path.dirname(image),
+            `.${baseName}.${extname}`
+          )
+          await fs.rename(image, originImageBakPath);
+          await fs.rename(addWaterMarkImageTmpPath, image);
+          logger.info('watermark 水印添加成功')
+          addWaterMarkImagePath = image
+          logger.info(`原始图片原位置：${image}`)
+          logger.info(`原始图片转移位置：${originImageBakPath}`)
+          logger.info(`水印图片位置：${addWaterMarkImagePath}`)
 
-              })
-              break
-            case WmImageSaveType.originNameWithTimestamp:
-              addWaterMarkImagePath = path.join(
-                path.dirname(image),
-                `${baseName}_${dayjs().format('YYYYMMDDHHmmss')}.${extname}`
-              )
-              break
-            default:
-              ctx.once('finished', () => {
-                // 删除 picgo 生成的图片文件，例如 `~/.picgo/20200621205720.png`
-                fs.remove(addWaterMarkImagePath).catch((e) => {
+          ctx.once('finished', () => {
+            switch (wmImageSaveType) {
+              case WmImageSaveType.abandon:
+                fs.renameSync(originImageBakPath, image)
+                break;
+              case WmImageSaveType.replaceOrigin:
+                fs.remove(originImageBakPath).catch((e) => {
                   ctx.log.error(e)
                 })
-              })
-              break
-          }
+                break;
+              case WmImageSaveType.originNameWithTimestamp:
+                fs.renameSync(addWaterMarkImagePath, addWaterMarkImageTmpPath);
+                fs.renameSync(originImageBakPath, image);
+                break;
+              case WmImageSaveType.renameOrigin:
+                fs.renameSync(originImageBakPath, addWaterMarkImageTmpPath);
+                break;
+            }
+          })
+
           ctx.once('failed', () => {
             // 删除 picgo 生成的图片文件，例如 `~/.picgo/20200621205720.png`
             fs.remove(addWaterMarkImagePath).catch((e) => {
@@ -145,16 +135,6 @@ export const inputAddWaterMarkHandle: (
             })
           })
         }
-
-        await sharpedImage
-          .composite([
-            {
-              input: await sharpedWaterMark.toBuffer(),
-              ...coordinate
-            }
-          ]).toFile(addWaterMarkImagePath)
-
-        logger.info('watermark 水印添加成功')
       }
       return addWaterMarkImagePath
     })
